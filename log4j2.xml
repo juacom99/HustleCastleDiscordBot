@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d{dd/MM/yyyy HH:mm:ss} [%t] %-5level %logger{36} - %msg%n"/>
+    </Console>
+    
+    <!-- Rolling File Appender -->
+    <RollingFile name="RollingFile">
+      <FileName>./log/DiscordTiviaBot.log</FileName>
+      <FilePattern>./log/%d{yyyy-MM-dd}.log</FilePattern>
+      <PatternLayout>
+        <Pattern>%d{dd/MM/yyyy HH:mm:ss} [%t] %-5level %logger{36} - %msg%n</Pattern>
+      </PatternLayout>
+      <Policies>
+        <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+        <SizeBasedTriggeringPolicy size="20 MB" />
+      </Policies>
+      <DefaultRolloverStrategy max="5" />
+    </RollingFile>
+  </Appenders>
+  <Loggers>
+      
+     
+    <Root level="trace" additivity="true">
+      <AppenderRef ref="Console"/>
+      <AppenderRef ref="RollingFile" />
+    </Root>
+  </Loggers>
+</Configuration>
