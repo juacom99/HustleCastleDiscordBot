@@ -36,20 +36,20 @@ public class HustleCastleBot extends ListenerAdapter {
     private static final Logger logger = LogManager.getLogger(HustleCastleBot.class.getName());
     
 
-    public HustleCastleBot() throws InterruptedException, LoginException {
+    public HustleCastleBot(String token,String owner) throws InterruptedException, LoginException {
         
         respondeToBots = false;
         this.jda.addEventListener(this);
         
         CommandClientBuilder builder = new CommandClientBuilder();
         builder.setPrefix("!");
-        builder.setOwnerId("583339878637371412");
+        builder.setOwnerId(owner);
         builder.setGame(Game.playing("Huste Castle"));
         builder.addCommands(new TopicCommand());
         
         CommandClient client = builder.build();
         
-        this.jda = new JDABuilder(AccountType.BOT).setToken("NTgzMzM5ODc4NjM3MzcxNDEy.XO9Haw.grdkaYgr20mc7Uis7P4HQm63R2E").build();
+        this.jda = new JDABuilder(AccountType.BOT).setToken(token).build();
     }
 
 

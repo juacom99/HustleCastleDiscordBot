@@ -5,10 +5,10 @@
  */
 package com.improvisados.hustlecastlediscordbot;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import com.improvisados.hustlecastlediscordbot.configuration.Configuration;
+import java.io.FileNotFoundException;
 import javax.security.auth.login.LoginException;
-import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.LogManager;
 
 /**
  *
@@ -16,17 +16,25 @@ import org.apache.log4j.BasicConfigurator;
  */
 public class Main
 {
+    private static final org.apache.log4j.Logger logger = LogManager.getLogger(Main.class.getName());
+    
     public static void main(String[] args)
     {
         try
         {
-            HustleCastleBot bot=new HustleCastleBot();
+            Configuration cfg=Configuration.getInstance();
+            HustleCastleBot bot=new HustleCastleBot(cfg.getToken(),cfg.getOwner());
         } catch (InterruptedException ex)
         {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+           logger.error(ex);
         } catch (LoginException ex)
         {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+             logger.error(ex);
         }
+        catch (FileNotFoundException ex)
+        {
+             logger.error("Configuration file (settings.json) not found. Please create a configuration file and run the bot again");
+        }
+        
     }
 }

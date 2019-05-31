@@ -35,12 +35,11 @@ public class TopicCommand extends Command
         
         if(args!=null && !args.trim().equals(""))
         {
-            ce.reply("Le digo pepe veni y el salta salta, pepe tomá y el salta salta, pepe pará y el salta salta, te vas a marear, te vas a marear");
+            ce.reply("Hello World!");
         }
         else
         {
             ce.reply("Topico no encontrado");
         }
     }
-    
 }
