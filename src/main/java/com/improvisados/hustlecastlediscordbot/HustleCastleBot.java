@@ -124,14 +124,6 @@ public class HustleCastleBot extends ListenerAdapter
     }
 
     @Override
-    public void onMessageReceived(MessageReceivedEvent event)
-    {
-        logger.debug(event.getMessage().getContentRaw());
-    }
-
-    
-    
-    @Override
     public void onGuildMemberLeave(GuildMemberLeaveEvent event)
     {
         event.getGuild().getDefaultChannel().sendMessage("Good bye ***" + event.getUser().getName() + "***, we are gonna miss you ").queue();
