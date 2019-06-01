@@ -5,6 +5,16 @@
     <artifactId>HustleCastleDiscordBot</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
+    
+    <build>
+    <resources>
+        <resource>
+            <directory>src/main/resources</directory>
+            <filtering>true</filtering> 
+        </resource>
+    </resources>
+</build> 
+
     <dependencies>
         <!-- JDA -->
         <dependency>

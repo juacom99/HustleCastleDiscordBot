@@ -5,7 +5,12 @@
  */
 package com.improvisados.hustlecastlediscordbot;
 
+import java.util.List;
+import net.dv8tion.jda.core.entities.Guild;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.quartz.Job;
+import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
@@ -15,13 +20,21 @@ import org.quartz.JobExecutionException;
  */
 public class WarRemainderJob implements Job
 {
-    
+    private static final Logger logger = LogManager.getLogger(WarRemainderJob.class.getName());
     
 
     @Override
-    public void execute(JobExecutionContext jec) throws JobExecutionException
+    public void execute(JobExecutionContext context) throws JobExecutionException
     {
-        System.out.println("Do something");
+       
+        JobDataMap data=context.getJobDetail().getJobDataMap();
+        
+        List<Guild> guilds =(List<Guild>) data.get("guilds");
+        
+        for(Guild guild:guilds)
+        {
+            guild.getDefaultChannel().sendMessage("@everyone  el clan esta en guerra. Por favor despligue sus tropas").queue();
+        }
     }
     
 }

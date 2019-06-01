@@ -27,6 +27,7 @@ import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.events.ReadyEvent;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -75,7 +76,18 @@ public class HustleCastleBot extends ListenerAdapter
 
         jda.addEventListener(client);
 
-        SchedulerFactory sf = new StdSchedulerFactory();
+    }
+
+    @Override
+    public void onGuildMemberJoin(GuildMemberJoinEvent event)
+    {
+        event.getGuild().getDefaultChannel().sendMessage("Welcome ***" + event.getUser().getName() + "*** to " + event.getGuild().getName()).queue();
+    }
+
+    @Override
+    public void onReady(ReadyEvent event)
+    {
+         SchedulerFactory sf = new StdSchedulerFactory();
         try
         {
             this.scheduler = sf.getScheduler();
@@ -83,15 +95,16 @@ public class HustleCastleBot extends ListenerAdapter
             WarRemainderJob warReminder = new WarRemainderJob();
             Date startTime = DateBuilder.nextGivenSecondDate(null, 10);
 
-            JobDetail job = JobBuilder.newJob(WarRemainderJob.class).withIdentity("dummyJobName", "group1").build();
-
-            // run every 20 seconds infinite loop
+            JobDetail job = JobBuilder.newJob(WarRemainderJob.class).withIdentity("Clan War remainder", "group1").build();
+            job.getJobDataMap().put("guilds",jda.getGuilds());
+            
+            String cron="* * 10,15,20 ? * * *";
             CronTrigger crontrigger = TriggerBuilder
                     .newTrigger()
-                    .withIdentity("TwentySec", "group1")
+                    .withIdentity("Clan War remainder Job", "group1")
                     .startAt(startTime)
                     // startNow()
-                    .withSchedule(CronScheduleBuilder.cronSchedule("0/20 * * * * ?"))
+                    .withSchedule(CronScheduleBuilder.cronSchedule("0/5 * * ? * * *"))
                     .build();
 
             scheduler.start();
@@ -102,15 +115,16 @@ public class HustleCastleBot extends ListenerAdapter
         {
             java.util.logging.Logger.getLogger(HustleCastleBot.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
     @Override
-    public void onGuildMemberJoin(GuildMemberJoinEvent event)
+    public void onMessageReceived(MessageReceivedEvent event)
     {
-        event.getGuild().getDefaultChannel().sendMessage("Welcome ***" + event.getUser().getName() + "*** to " + event.getGuild().getName()).queue();
+        
     }
 
+    
+    
     @Override
     public void onGuildMemberLeave(GuildMemberLeaveEvent event)
     {
