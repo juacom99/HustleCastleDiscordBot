@@ -19,6 +19,61 @@ public class Configuration implements Serializable
 {
     private String token;
     private String owner;
+    private String mysqlHost;
+    private String mysqlPort;
+
+    public String getMysqlHost()
+    {
+        return mysqlHost;
+    }
+
+    public void setMysqlHost(String mysqlHost)
+    {
+        this.mysqlHost = mysqlHost;
+    }
+
+    public String getMysqlPort()
+    {
+        return mysqlPort;
+    }
+
+    public void setMysqlPort(String mysqlPort)
+    {
+        this.mysqlPort = mysqlPort;
+    }
+
+    public String getMysqlDatabaseName()
+    {
+        return mysqlDatabaseName;
+    }
+
+    public void setMysqlDatabaseName(String mysqlDatabaseName)
+    {
+        this.mysqlDatabaseName = mysqlDatabaseName;
+    }
+
+    public String getMysqlUser()
+    {
+        return mysqlUser;
+    }
+
+    public void setMysqlUser(String mysqlUser)
+    {
+        this.mysqlUser = mysqlUser;
+    }
+
+    public String getMysqlPassword()
+    {
+        return mysqlPassword;
+    }
+
+    public void setMysqlPassword(String mysqlPassword)
+    {
+        this.mysqlPassword = mysqlPassword;
+    }
+    private String mysqlDatabaseName;
+    private String mysqlUser;
+    private String mysqlPassword;
     
     private static Configuration instance;
 

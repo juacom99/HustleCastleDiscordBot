@@ -10,6 +10,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import java.sql.PreparedStatement;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -56,6 +57,7 @@ public class HustleCastleBot extends ListenerAdapter
     private boolean respondeToBots;
     private static final Logger logger = LogManager.getLogger(HustleCastleBot.class.getName());
 
+
     private Scheduler scheduler;
 
     public HustleCastleBot(String token, String owner) throws InterruptedException, LoginException
@@ -66,16 +68,7 @@ public class HustleCastleBot extends ListenerAdapter
         respondeToBots = false;
         this.jda.addEventListener(this);
 
-        CommandClientBuilder builder = new CommandClientBuilder();
-        builder.setPrefix("!");
-        builder.setOwnerId(owner);
-        builder.setGame(Game.playing("Huste Castle"));
-        builder.addCommands(new TopicCommand());
-
-        CommandClient client = builder.build();
-
-        jda.addEventListener(client);
-
+        
     }
 
     @Override
@@ -87,6 +80,19 @@ public class HustleCastleBot extends ListenerAdapter
     @Override
     public void onReady(ReadyEvent event)
     {
+        
+        CommandClientBuilder builder = new CommandClientBuilder();
+        builder.setPrefix("!");
+        builder.setOwnerId("368791176796700672");
+        builder.setGame(Game.playing("Huste Castle"));
+        builder.addCommands(new TopicCommand());
+        
+
+        CommandClient client = builder.build();
+
+       jda.addEventListener(client);
+
+       
          SchedulerFactory sf = new StdSchedulerFactory();
         try
         {
@@ -98,17 +104,17 @@ public class HustleCastleBot extends ListenerAdapter
             JobDetail job = JobBuilder.newJob(WarRemainderJob.class).withIdentity("Clan War remainder", "group1").build();
             job.getJobDataMap().put("guilds",jda.getGuilds());
             
-            String cron="* * 10,15,20 ? * * *";
+            //String cron="* * 10,15,20 ? * * *";
+            String cron="0/5 * * ? * * *";
             CronTrigger crontrigger = TriggerBuilder
                     .newTrigger()
                     .withIdentity("Clan War remainder Job", "group1")
                     .startAt(startTime)
-                    // startNow()
-                    .withSchedule(CronScheduleBuilder.cronSchedule("0/5 * * ? * * *"))
+                    .withSchedule(CronScheduleBuilder.cronSchedule(cron))
                     .build();
 
-            scheduler.start();
-            scheduler.scheduleJob(job, crontrigger);
+           // scheduler.start();
+           // scheduler.scheduleJob(job, crontrigger);
 
         }
         catch (SchedulerException ex)
@@ -120,7 +126,7 @@ public class HustleCastleBot extends ListenerAdapter
     @Override
     public void onMessageReceived(MessageReceivedEvent event)
     {
-        
+        logger.debug(event.getMessage().getContentRaw());
     }
 
     

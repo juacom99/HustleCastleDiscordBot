@@ -7,13 +7,13 @@
     <packaging>jar</packaging>
     
     <build>
-    <resources>
-        <resource>
-            <directory>src/main/resources</directory>
-            <filtering>true</filtering> 
-        </resource>
-    </resources>
-</build> 
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering> 
+            </resource>
+        </resources>
+    </build> 
 
     <dependencies>
         <!-- JDA -->
@@ -52,16 +52,28 @@
             <artifactId>quartz</artifactId>
             <version>2.3.1</version>
         </dependency>
+        <!--MySQL JDBC-->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.16</version>
+        </dependency>
 
         
     </dependencies>
     <repositories>
+        <repository>
+            <id>Maven Central</id>
+            <name>Maven Central</name>
+            <url>http://repo.maven.apache.org/maven2</url>
+        </repository>
         <repository>
             <id>jcenter</id>
             <name>jcenter-bintray</name>
             <url>http://jcenter.bintray.com</url>
         </repository>
     </repositories>
+    
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>

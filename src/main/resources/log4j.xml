@@ -14,6 +14,12 @@
     <param name="ConversionPattern" value="%d{dd/MM/yyyy HH:mm:ss} [%-5p]- %msg%n" />
     </layout>
   </appender>
+  
+       <logger name="net.dv8tion.jda.core.entities.impl.JDAImpl" additivity="false">
+        <level value="debug"/>
+        
+    </logger>
+        
  
   <root>
     <priority value ="debug"></priority>
