@@ -21,6 +21,18 @@ public class Configuration implements Serializable
     private String owner;
     private String mysqlHost;
     private String mysqlPort;
+    private String mysqlDatabaseName;
+    private String mysqlUser;
+    private String mysqlPassword;
+    private String cron;
+    
+    private static Configuration instance;
+
+    public Configuration(String token, String owner)
+    {
+        this.token = token;
+        this.owner = owner;
+    }
 
     public String getMysqlHost()
     {
@@ -71,17 +83,6 @@ public class Configuration implements Serializable
     {
         this.mysqlPassword = mysqlPassword;
     }
-    private String mysqlDatabaseName;
-    private String mysqlUser;
-    private String mysqlPassword;
-    
-    private static Configuration instance;
-
-    public Configuration(String token, String owner)
-    {
-        this.token = token;
-        this.owner = owner;
-    }
 
     public String getToken()
     {
@@ -102,6 +103,16 @@ public class Configuration implements Serializable
     {
         this.owner = owner;
     }
+
+    public String getCron()
+    {
+        return cron;
+    }
+
+    public void setCron(String cron)
+    {
+        this.cron = cron;
+    }
     
     
     
@@ -117,9 +128,4 @@ public class Configuration implements Serializable
         return instance;
     }
     
-    
-    
-    
-    
-
 }

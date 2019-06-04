@@ -5,33 +5,21 @@ package com.improvisados.hustlecastlediscordbot;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-import com.improvisados.hustlecastlediscordbot.commands.TopicCommand;
-import com.jagrosh.jdautilities.command.Command;
+import com.improvisados.hustlecastlediscordbot.commands.ManCommand;
+import com.improvisados.hustlecastlediscordbot.configuration.Configuration;
 import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
-import com.jagrosh.jdautilities.command.CommandEvent;
-import java.sql.PreparedStatement;
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.io.FileNotFoundException;
 import java.util.Date;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import javax.security.auth.login.LoginException;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.Game;
-import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.events.ReadyEvent;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -80,12 +68,24 @@ public class HustleCastleBot extends ListenerAdapter
     @Override
     public void onReady(ReadyEvent event)
     {
+        String owner="368791176796700672";
+        String cron="* * 10,16,22 ? * * *";
+        
+        try
+        {
+            Configuration cfg=Configuration.getInstance();
+            owner=cfg.getOwner();
+            cron=cfg.getCron();
+        } catch (FileNotFoundException ex)
+        {
+            java.util.logging.Logger.getLogger(HustleCastleBot.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         CommandClientBuilder builder = new CommandClientBuilder();
         builder.setPrefix("!");
-        builder.setOwnerId("368791176796700672");
+        builder.setOwnerId(owner);
         builder.setGame(Game.playing("Huste Castle"));
-        builder.addCommands(new TopicCommand());
+        builder.addCommands(new ManCommand());
         
 
         CommandClient client = builder.build();
@@ -104,8 +104,6 @@ public class HustleCastleBot extends ListenerAdapter
             JobDetail job = JobBuilder.newJob(WarRemainderJob.class).withIdentity("Clan War remainder", "group1").build();
             job.getJobDataMap().put("guilds",jda.getGuilds());
             
-            //String cron="* * 10,15,20 ? * * *";
-            String cron="0/5 * * ? * * *";
             CronTrigger crontrigger = TriggerBuilder
                     .newTrigger()
                     .withIdentity("Clan War remainder Job", "group1")
@@ -113,8 +111,8 @@ public class HustleCastleBot extends ListenerAdapter
                     .withSchedule(CronScheduleBuilder.cronSchedule(cron))
                     .build();
 
-           // scheduler.start();
-           // scheduler.scheduleJob(job, crontrigger);
+            scheduler.start();
+            scheduler.scheduleJob(job, crontrigger);
 
         }
         catch (SchedulerException ex)

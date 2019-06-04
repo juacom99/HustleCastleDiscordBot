@@ -28,25 +28,24 @@ import org.apache.log4j.Logger;
 @CommandInfo(
         name =
         {
-            "topic"
+            "man"
         },
         description = "Read on a topic"
 )
 @Author("Joaquin Martinez")
-public class TopicCommand extends Command
+public class ManCommand extends Command
 {
 
-    private static final Logger logger = LogManager.getLogger(TopicCommand.class.getName());
+    private static final Logger logger = LogManager.getLogger(ManCommand.class.getName());
     private PreparedStatement psSelectTopic = null;
 
     private Connection con;
 
-    public TopicCommand()
+    public ManCommand()
     {
-        this.name = "topic";
-        this.help = "Read on a topic";
+        this.name = "man";
+        this.help = "get the manual for a topic";
         this.guildOnly = true;
-        this.aliases= new String[] { "ayuda"};
 
         try
         {

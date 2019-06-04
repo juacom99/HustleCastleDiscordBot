@@ -33,7 +33,7 @@ public class WarRemainderJob implements Job
         
         for(Guild guild:guilds)
         {
-            guild.getDefaultChannel().sendMessage("@everyone  el clan esta en guerra. Por favor despligue sus tropas").queue();
+            guild.getDefaultChannel().sendMessage("@everyone: Una nueva guerra de clanes ha comenzado. Por favor comuniquese con alguno de los lideres que le diran donde despligar sus tropas").queue();
         }
     }
     
