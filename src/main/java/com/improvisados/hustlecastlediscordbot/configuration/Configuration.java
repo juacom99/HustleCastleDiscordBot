@@ -24,7 +24,10 @@ public class Configuration implements Serializable
     private String mysqlDatabaseName;
     private String mysqlUser;
     private String mysqlPassword;
-    private String cron;
+    private String cronWarStarts;
+    private String warStartsMessage;
+    private String cronAboutToBegin;
+    private String warAboutToBegin;
     
     private static Configuration instance;
 
@@ -104,17 +107,40 @@ public class Configuration implements Serializable
         this.owner = owner;
     }
 
-    public String getCron()
-    {
-        return cron;
+    public String getCronWarStarts() {
+        return cronWarStarts;
     }
 
-    public void setCron(String cron)
-    {
-        this.cron = cron;
+    public void setCronWarStarts(String cronWarStarts) {
+        this.cronWarStarts = cronWarStarts;
     }
+
+    public String getCronAboutToBegin() {
+        return cronAboutToBegin;
+    }
+
+    public void setCronAboutToBegin(String cronAboutToBegin) {
+        this.cronAboutToBegin = cronAboutToBegin;
+    }
+
+   
     
-    
+
+    public String getWarStartsMessage() {
+        return warStartsMessage;
+    }
+
+    public void setWarStartsMessage(String warMessage) {
+        this.warStartsMessage = warMessage;
+    }
+
+    public String getWarAboutToBegin() {
+        return warAboutToBegin;
+    }
+
+    public void setWarAboutToBegin(String warAboutToBegin) {
+        this.warAboutToBegin = warAboutToBegin;
+    }
     
     public static Configuration getInstance() throws FileNotFoundException
     {
