@@ -11,6 +11,9 @@ import com.google.gson.GsonBuilder;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Serializable;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -35,6 +38,8 @@ public class Configuration implements Serializable
     private String cronAboutToBegin;
     private String warAboutToBegin;
     private ArrayList<LocalTime> wars;
+    private InetAddress proxyIp;
+    private int proxyPort;
     
     private static Configuration instance;
 
@@ -144,6 +149,19 @@ public class Configuration implements Serializable
     public void setWarAboutToBegin(String warAboutToBegin) {
         this.warAboutToBegin = warAboutToBegin;
     }
+
+     public Proxy getProxy() {
+     Proxy ret=null;
+     
+     if(this.proxyIp!=null && this.proxyPort!=0)
+     {
+         ret=new Proxy(Proxy.Type.HTTP,new InetSocketAddress(proxyIp, proxyPort));
+     }
+     
+     return ret;
+        
+    }
+    
     
     public static Configuration getInstance() throws FileNotFoundException
     {

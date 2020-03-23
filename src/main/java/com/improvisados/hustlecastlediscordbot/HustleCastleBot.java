@@ -14,9 +14,11 @@ import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import java.awt.Color;
 import java.io.FileNotFoundException;
+import java.net.Proxy;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import javax.security.auth.login.LoginException;
 import net.dv8tion.jda.api.AccountType;
@@ -33,6 +35,8 @@ import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberLeaveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.restaction.ChannelAction;
+import okhttp3.Authenticator;
+import okhttp3.OkHttpClient;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.joda.time.LocalTime;
@@ -63,6 +67,18 @@ public class HustleCastleBot extends ListenerAdapter {
 
         this.jda = new JDABuilder(AccountType.BOT).setToken(token).build();
 
+        respondeToBots = false;
+        this.jda.addEventListener(this);
+        this.jda.getPresence().setActivity(Activity.playing("Hustle Castle"));
+
+    }
+    
+    public HustleCastleBot(String token, String owner,Proxy proxy) throws InterruptedException, LoginException {
+
+         OkHttpClient.Builder builder = new OkHttpClient.Builder().proxy(proxy).proxyAuthenticator(Authenticator.NONE);
+
+        OkHttpClient cli = builder.proxy(proxy).proxyAuthenticator(Authenticator.NONE).connectTimeout(60, TimeUnit.SECONDS).writeTimeout(60, TimeUnit.SECONDS).readTimeout(60, TimeUnit.SECONDS).build();
+        this.jda = new JDABuilder(AccountType.BOT).setHttpClientBuilder(builder).setHttpClient(cli).setToken(token).build();
         respondeToBots = false;
         this.jda.addEventListener(this);
         this.jda.getPresence().setActivity(Activity.playing("Hustle Castle"));
