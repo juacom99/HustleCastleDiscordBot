@@ -5,21 +5,16 @@
  */
 package com.improvisados.hustlecastlediscordbot.commands;
 
-import com.improvisados.hustlecastlediscordbot.HustleCastleBot;
 import com.improvisados.hustlecastlediscordbot.configuration.Configuration;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.doc.standard.CommandInfo;
 import com.jagrosh.jdautilities.examples.doc.Author;
-import com.mchange.v2.lang.StringUtils;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import javax.swing.text.html.HTML;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.ChannelType;
 import org.apache.log4j.LogManager;

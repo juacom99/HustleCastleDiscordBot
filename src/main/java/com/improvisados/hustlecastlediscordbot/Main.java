@@ -10,16 +10,18 @@ import java.io.FileNotFoundException;
 import javax.security.auth.login.LoginException;
 import org.apache.log4j.LogManager;
 
+
+
 /**
  *
  * @author jomartinez
  */
-public class Main
-{
+public class Main {
+
     private static final org.apache.log4j.Logger logger = LogManager.getLogger(Main.class.getName());
-    
-    public static void main(String[] args)
-    {
+
+    public static void main(String[] args) {
+        
         
         try
         {
@@ -36,6 +38,5 @@ public class Main
         {
              logger.error("Configuration file (settings.json) not found. Please create a configuration file and run the bot again");
         }
-        
     }
 }

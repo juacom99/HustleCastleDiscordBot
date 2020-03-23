@@ -5,11 +5,17 @@
  */
 package com.improvisados.hustlecastlediscordbot.configuration;
 
+import com.fatboyindustrial.gsonjodatime.Converters;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Serializable;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import org.joda.time.LocalTime;
+//import org.joda.time.LocalTime;
 
 /**
  *
@@ -28,13 +34,13 @@ public class Configuration implements Serializable
     private String warStartsMessage;
     private String cronAboutToBegin;
     private String warAboutToBegin;
+    private ArrayList<LocalTime> wars;
     
     private static Configuration instance;
 
-    public Configuration(String token, String owner)
+    public Configuration()
     {
-        this.token = token;
-        this.owner = owner;
+        this.wars=new ArrayList<LocalTime>();
     }
 
     public String getMysqlHost()
@@ -123,9 +129,6 @@ public class Configuration implements Serializable
         this.cronAboutToBegin = cronAboutToBegin;
     }
 
-   
-    
-
     public String getWarStartsMessage() {
         return warStartsMessage;
     }
@@ -146,7 +149,7 @@ public class Configuration implements Serializable
     {
         if(instance==null)
         {
-            Gson gson=new GsonBuilder().setPrettyPrinting().create();
+           Gson gson = Converters.registerLocalTime(new GsonBuilder()).create();
             
             instance=gson.fromJson(new FileReader("./settings.json"), Configuration.class);
         }
@@ -154,4 +157,26 @@ public class Configuration implements Serializable
         return instance;
     }
     
+    public void addWar(LocalTime warTime)
+    {
+        if(!wars.contains(warTime))
+        {
+            wars.add(warTime);
+        }
+    }
+    
+    
+    public void removeWar(LocalTime warTime)
+    {
+        if(wars.contains(warTime))
+        {
+            wars.remove(warTime);
+        }
+    }    
+    
+    
+    public Iterator<LocalTime> getWars()
+    {
+        return wars.iterator();
+    }
 }
