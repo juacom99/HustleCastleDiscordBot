@@ -17,6 +17,7 @@ import java.net.Proxy;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import org.apache.log4j.LogManager;
 import org.joda.time.LocalTime;
 //import org.joda.time.LocalTime;
 
@@ -40,12 +41,19 @@ public class Configuration implements Serializable
     private ArrayList<LocalTime> wars;
     private InetAddress proxyIp;
     private int proxyPort;
+    private String warAnnouncementChannelName;
+    private String administrativeChannelName;
+    private int minutesToLastAnnounce;
     
     private static Configuration instance;
 
+    
+    private static final org.apache.log4j.Logger logger = LogManager.getLogger(Configuration.class.getName());
+    
     public Configuration()
     {
         this.wars=new ArrayList<LocalTime>();
+        this.minutesToLastAnnounce=60;
     }
 
     public String getMysqlHost()
@@ -168,8 +176,21 @@ public class Configuration implements Serializable
         if(instance==null)
         {
            Gson gson = Converters.registerLocalTime(new GsonBuilder()).create();
-            
-            instance=gson.fromJson(new FileReader("./settings.json"), Configuration.class);
+           String configPath="./settings.json";
+           logger.debug("Using Confg File "+configPath);
+            instance=gson.fromJson(new FileReader(configPath), Configuration.class);
+        }
+        
+        return instance;
+    }
+    
+    public static Configuration getInstance(String configPath) throws FileNotFoundException
+    {
+        if(instance==null)
+        {
+           Gson gson = Converters.registerLocalTime(new GsonBuilder()).create();
+           logger.debug("Using Confg File "+configPath);
+            instance=gson.fromJson(new FileReader(configPath), Configuration.class);
         }
         
         return instance;
@@ -197,4 +218,44 @@ public class Configuration implements Serializable
     {
         return wars.iterator();
     }
+
+    public String getWarAnnouncementChannelName() {
+       String ret="war-announcement";
+       if(this.warAnnouncementChannelName!=null)
+       {
+            ret=warAnnouncementChannelName.toLowerCase().replaceAll(" ","-");
+       }       
+       return ret;
+    }
+
+    public String getAdministrativeChannelName() {
+    String ret="war-councile";
+
+    if(this.administrativeChannelName!=null)
+     {
+        ret=administrativeChannelName.toLowerCase().replaceAll(" ","-");
+     }     
+     return ret;
+    }
+
+    public void setWarAnnouncementChannelName(String warAnnouncementChannelName) {
+        this.warAnnouncementChannelName = warAnnouncementChannelName;
+    }
+
+    public void setAdministrativeChannelName(String administrativeChannelName) {
+        this.administrativeChannelName = administrativeChannelName;
+    }
+
+    public int getMinutesToLastAnnounce()
+    {
+        return minutesToLastAnnounce;
+    }
+
+    public void setMinutesToLastAnnounce(int minutesToLastAnnounce) {
+        this.minutesToLastAnnounce = minutesToLastAnnounce;
+    }
+
+    
+    
+    
 }

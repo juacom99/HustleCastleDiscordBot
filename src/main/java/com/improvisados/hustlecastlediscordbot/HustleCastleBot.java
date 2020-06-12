@@ -5,6 +5,7 @@ package com.improvisados.hustlecastlediscordbot;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+import com.improvisados.hustlecastlediscordbot.commands.InvetemeCommand;
 import com.improvisados.hustlecastlediscordbot.commands.WarsList;
 import com.improvisados.hustlecastlediscordbot.jobs.WarStartsRemainderJob;
 import com.improvisados.hustlecastlediscordbot.commands.ManCommand;
@@ -14,6 +15,7 @@ import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import java.awt.Color;
 import java.io.FileNotFoundException;
+
 import java.net.Proxy;
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,7 +31,6 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.ReadyEvent;
-import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberLeaveEvent;
@@ -60,6 +61,7 @@ public class HustleCastleBot extends ListenerAdapter {
     private JDA jda;
     private boolean respondeToBots;
     private static final Logger logger = LogManager.getLogger(HustleCastleBot.class.getName());
+    private CommandClient commands;
 
     private Scheduler scheduler;
 
@@ -72,10 +74,10 @@ public class HustleCastleBot extends ListenerAdapter {
         this.jda.getPresence().setActivity(Activity.playing("Hustle Castle"));
 
     }
-    
-    public HustleCastleBot(String token, String owner,Proxy proxy) throws InterruptedException, LoginException {
 
-         OkHttpClient.Builder builder = new OkHttpClient.Builder().proxy(proxy).proxyAuthenticator(Authenticator.NONE);
+    public HustleCastleBot(String token, String owner, Proxy proxy) throws InterruptedException, LoginException {
+
+        OkHttpClient.Builder builder = new OkHttpClient.Builder().proxy(proxy).proxyAuthenticator(Authenticator.NONE);
 
         OkHttpClient cli = builder.proxy(proxy).proxyAuthenticator(Authenticator.NONE).connectTimeout(60, TimeUnit.SECONDS).writeTimeout(60, TimeUnit.SECONDS).readTimeout(60, TimeUnit.SECONDS).build();
         this.jda = new JDABuilder(AccountType.BOT).setHttpClientBuilder(builder).setHttpClient(cli).setToken(token).build();
@@ -107,10 +109,9 @@ public class HustleCastleBot extends ListenerAdapter {
         builder.setOwnerId(owner);
         builder.addCommands(new ManCommand());
         builder.addCommand(new WarsList());
-
-        CommandClient client = builder.build();
-
-        jda.addEventListener(client);
+        builder.addCommand(new InvetemeCommand("583339878637371412", 536346103));
+        commands = builder.build();
+        jda.addEventListener(commands);
     }
 
     @Override
@@ -118,12 +119,22 @@ public class HustleCastleBot extends ListenerAdapter {
         event.getGuild().getDefaultChannel().sendMessage("Good bye ***" + event.getUser().getName() + "***, we are gonna miss you ").queue();
     }
 
-
     @Override
     public void onGuildReady(GuildReadyEvent event) {
-        Guild guild = event.getGuild();
-        setUpRoles(guild);
-        setUpTextAdminChat(guild);
+
+        try {
+            Guild guild = event.getGuild();
+            logger.info(guild.getName() + " Ready");
+            logger.info("   Setting up roles");
+            setUpRoles(guild);
+            logger.info("   Setting up Admins Text Chat");
+            setUpTextAdminChat(guild);
+            logger.info("   Setting up War Annoucement Text Chat");
+            setUpWarAnnouncementTextChat(guild);
+        }
+        catch (FileNotFoundException ex) {
+
+        }
     }
 
     private void setUpRoles(Guild guild) {
@@ -216,10 +227,13 @@ public class HustleCastleBot extends ListenerAdapter {
         }
     }
 
-    private void setUpTextAdminChat(Guild guild) {
-
-        if (guild.getTextChannelsByName("War-Council", true).isEmpty()) {
-            ChannelAction<TextChannel> warCouncilChannel = guild.createTextChannel("War-Council");
+    private void setUpTextAdminChat(Guild guild) throws FileNotFoundException {
+        
+        Configuration cfg = Configuration.getInstance();
+        String channelName=cfg.getAdministrativeChannelName();
+        
+        if (guild.getTextChannelsByName(channelName, true).isEmpty()) {
+            ChannelAction<TextChannel> warCouncilChannel = guild.createTextChannel(channelName);
 
             ArrayList<Permission> perms = new ArrayList<Permission>();
             perms.add(Permission.VIEW_CHANNEL);
@@ -253,6 +267,60 @@ public class HustleCastleBot extends ListenerAdapter {
         }
     }
 
+    private void setUpWarAnnouncementTextChat(Guild guild) throws FileNotFoundException{
+        Configuration cfg = Configuration.getInstance();
+        String channelName=cfg.getWarAnnouncementChannelName();
+        if (guild.getTextChannelsByName(channelName, true).isEmpty()) {
+            ChannelAction<TextChannel> warCouncilChannel = guild.createTextChannel(channelName);
+
+            ArrayList<Permission> allowEveryone = new ArrayList<Permission>();
+
+            ArrayList<Permission> denyEveryone = new ArrayList<Permission>();
+
+            denyEveryone.add(Permission.CREATE_INSTANT_INVITE);
+            denyEveryone.add(Permission.MANAGE_CHANNEL);
+            denyEveryone.add(Permission.MANAGE_PERMISSIONS);
+            denyEveryone.add(Permission.MANAGE_WEBHOOKS);
+            allowEveryone.add(Permission.MESSAGE_READ);
+            denyEveryone.add(Permission.MESSAGE_WRITE);
+            denyEveryone.add(Permission.MESSAGE_TTS);
+            denyEveryone.add(Permission.MESSAGE_MANAGE);
+            denyEveryone.add(Permission.MESSAGE_EMBED_LINKS);
+            denyEveryone.add(Permission.MESSAGE_ATTACH_FILES);
+            allowEveryone.add(Permission.MESSAGE_HISTORY);
+            denyEveryone.add(Permission.MESSAGE_MENTION_EVERYONE);
+            allowEveryone.add(Permission.MESSAGE_EXT_EMOJI);
+            allowEveryone.add(Permission.MESSAGE_ADD_REACTION);
+
+            warCouncilChannel.addPermissionOverride(guild.getPublicRole(), allowEveryone, denyEveryone);
+
+            ArrayList<Permission> allowBot = new ArrayList<Permission>();
+
+            ArrayList<Permission> denyBot = new ArrayList<Permission>();
+
+            allowBot.add(Permission.CREATE_INSTANT_INVITE);
+            denyBot.add(Permission.MANAGE_CHANNEL);
+            denyBot.add(Permission.MANAGE_PERMISSIONS);
+            denyBot.add(Permission.MANAGE_WEBHOOKS);
+            allowBot.add(Permission.MESSAGE_READ);
+            allowBot.add(Permission.MESSAGE_WRITE);
+            allowBot.add(Permission.MESSAGE_TTS);
+            denyBot.add(Permission.MESSAGE_MANAGE);
+            allowBot.add(Permission.MESSAGE_EMBED_LINKS);
+            allowBot.add(Permission.MESSAGE_ATTACH_FILES);
+            allowBot.add(Permission.MESSAGE_HISTORY);
+            allowBot.add(Permission.MESSAGE_MENTION_EVERYONE);
+            allowBot.add(Permission.MESSAGE_EXT_EMOJI);
+            allowBot.add(Permission.MESSAGE_ADD_REACTION);
+
+            warCouncilChannel.addPermissionOverride(guild.getRolesByName("Hustle Castel Discord Bot", true).get(0), allowBot, denyBot);
+
+            warCouncilChannel.setParent(guild.getDefaultChannel().getParent());
+
+            warCouncilChannel.queue();
+        }
+    }
+
     private void setUpSchedule(Iterator<LocalTime> wars) throws FileNotFoundException {
         SchedulerFactory sf = new StdSchedulerFactory();
 
@@ -272,7 +340,7 @@ public class HustleCastleBot extends ListenerAdapter {
                 Date startTime = DateBuilder.nextGivenSecondDate(null, 10);
                 JobDetail jobWarStarts = JobBuilder.newJob(WarStartsRemainderJob.class).withIdentity("Clan War Starts", warStarGroup).build();
                 jobWarStarts.getJobDataMap().put("guilds", jda.getGuilds());
-                cronWarStarts = "0 " + war.getMinuteOfHour()+" "+war.getHourOfDay()+ " ? * * *";
+                cronWarStarts = "0 " + war.getMinuteOfHour() + " " + war.getHourOfDay() + " ? * * *";
                 CronTrigger crontriggerWarStarts = TriggerBuilder
                         .newTrigger()
                         .withIdentity("Clan War War Starts remainder Job", warStarGroup)
@@ -283,14 +351,14 @@ public class HustleCastleBot extends ListenerAdapter {
                 scheduler.scheduleJob(jobWarStarts, crontriggerWarStarts);
 
                 //Add war begins to schedule
-                war = war.plusMinutes(45);
-                warStarGroup="War-about-to-start"+i;
-                cronAboutToBegin = "0 " + war.getMinuteOfHour()+" "+war.getHourOfDay()+ " ? * * *";
+                war = war.plusMinutes(105);
+                warStarGroup = "War-about-to-start" + i;
+                cronAboutToBegin = "0 " + war.getMinuteOfHour() + " " + war.getHourOfDay() + " ? * * *";
                 JobDetail jobWarAboutToBegin = JobBuilder.newJob(WarAboutToBeginJob.class).withIdentity("Clan War About to Begin", warStarGroup).build();
                 jobWarAboutToBegin.getJobDataMap().put("guilds", jda.getGuilds());
                 CronTrigger crontriggerWarAboutToBegin = TriggerBuilder
                         .newTrigger()
-                        .withIdentity("Clan War About to Begin remainder Job",warStarGroup)
+                        .withIdentity("Clan War About to Begin remainder Job", warStarGroup)
                         .startAt(startTime)
                         .withSchedule(CronScheduleBuilder.cronSchedule(cronAboutToBegin))
                         .build();

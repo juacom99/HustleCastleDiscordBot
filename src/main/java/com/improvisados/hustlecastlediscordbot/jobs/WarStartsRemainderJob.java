@@ -38,7 +38,7 @@ public class WarStartsRemainderJob implements Job
             String msg=cfg.getWarStartsMessage();
             for(Guild guild:guilds)
             {
-                guild.getDefaultChannel().sendMessage(msg).queue();
+                guild.getTextChannelsByName(cfg.getWarAnnouncementChannelName(), true).get(0).sendMessage(msg).queue();
             }
         } catch (FileNotFoundException ex) {
             java.util.logging.Logger.getLogger(WarStartsRemainderJob.class.getName()).log(Level.SEVERE, null, ex);

@@ -16,11 +16,9 @@ import java.util.logging.Level;
 import net.dv8tion.jda.api.MessageBuilder;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.DateTimeFormatterBuilder;
 
 @CommandInfo(
         name
@@ -62,7 +60,6 @@ public class WarsList extends Command {
         } catch (FileNotFoundException ex) {
             java.util.logging.Logger.getLogger(WarsList.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
 }
