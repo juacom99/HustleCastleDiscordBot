@@ -44,6 +44,7 @@ public class Configuration implements Serializable
     private String warAnnouncementChannelName;
     private String administrativeChannelName;
     private int minutesToLastAnnounce;
+    private LocalTime questRefreshTime;
     
     private static Configuration instance;
 
@@ -169,6 +170,18 @@ public class Configuration implements Serializable
      return ret;
         
     }
+
+    public LocalTime getQuestRefreshTime()
+    {
+        return questRefreshTime;
+    }
+
+    public void setQuestRefreshTime(LocalTime questRefreshTime)
+    {
+        this.questRefreshTime = questRefreshTime;
+    }
+     
+     
     
     
     public static Configuration getInstance() throws FileNotFoundException

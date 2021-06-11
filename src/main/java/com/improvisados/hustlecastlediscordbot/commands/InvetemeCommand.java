@@ -10,6 +10,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.doc.standard.CommandInfo;
 import com.jagrosh.jdautilities.examples.doc.Author;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -27,7 +28,7 @@ import org.apache.log4j.Logger;
 @Author("Joaquin Martinez")
 public class InvetemeCommand extends Command {
 
-    private static final Logger logger = LogManager.getLogger(ManCommand.class.getName());
+    private static final Logger logger = LogManager.getLogger(InvetemeCommand.class.getName());
     private String botId;
     private long permision;
 
@@ -48,12 +49,11 @@ public class InvetemeCommand extends Command {
         
         EmbedBuilder builder=new EmbedBuilder();
         
-        builder.setAuthor("Invite me to your Server","https://discordapp.com/oauth2/authorize?client_id=583339878637371412&scope=bot&permissions=536346103");
+        
+        
+        builder.setAuthor("Invite me to your Server","https://discordapp.com/oauth2/authorize?client_id=583339878637371412&scope=bot&permissions=2110782967");
         builder.setThumbnail("https://cdn.discordapp.com/app-icons/583339878637371412/cd2d213b310bc982e6a3073318ac0740.png?size=64");
         builder.setDescription("Invite this awesome bot to your server ");
         ce.getChannel().sendMessage(builder.build()).queue();
     }
-    
-    
-    //
 }

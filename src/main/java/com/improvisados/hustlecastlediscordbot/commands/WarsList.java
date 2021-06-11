@@ -13,6 +13,7 @@ import com.jagrosh.jdautilities.examples.doc.Author;
 import java.io.FileNotFoundException;
 import java.util.Iterator;
 import java.util.logging.Level;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -30,7 +31,7 @@ import org.joda.time.format.DateTimeFormatter;
 @Author("Joaquin Martinez")
 public class WarsList extends Command {
 
-    private static final Logger logger = LogManager.getLogger(ManCommand.class.getName());
+    private static final Logger logger = LogManager.getLogger(WarsList.class.getName());
 
     public WarsList() {
         this.name = "warslist";
@@ -46,17 +47,26 @@ public class WarsList extends Command {
             Iterator<LocalTime> wars = cfg.getWars();
             int c = 0;
             MessageBuilder builder = new MessageBuilder();
+            
+            EmbedBuilder eb=new EmbedBuilder();
+            
             LocalTime war;
             DateTimeFormatter fmt = DateTimeFormat.forPattern("HH:mm");
             builder.append("***War List for the clan ***\n");
+            
+            eb.setTitle("***War List for the clan ***");
+            
             while (wars.hasNext()) {
                 war = wars.next();
                 
-                builder.append("[" + c + "] " +fmt.print(war) +" \n");
+                //builder.append("[" + c + "] " +fmt.print(war) +" \n");
+                eb.addField("",(c+1)+") "+fmt.print(war),false);
                 c++;
             }
 
-            ce.getChannel().sendMessage(builder.build()).queue();
+            //ce.getChannel().sendMessage(builder.build()).queue();
+            ce.getChannel().sendMessage(eb.build()).queue();
+            
         } catch (FileNotFoundException ex) {
             java.util.logging.Logger.getLogger(WarsList.class.getName()).log(Level.SEVERE, null, ex);
         }
