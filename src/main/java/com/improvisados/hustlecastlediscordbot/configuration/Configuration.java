@@ -17,7 +17,8 @@ import java.net.Proxy;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import org.apache.log4j.LogManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.joda.time.LocalTime;
 //import org.joda.time.LocalTime;
 
@@ -49,7 +50,7 @@ public class Configuration implements Serializable
     private static Configuration instance;
 
     
-    private static final org.apache.log4j.Logger logger = LogManager.getLogger(Configuration.class.getName());
+    private static final Logger logger = LogManager.getLogger(Configuration.class.getName());
     
     public Configuration()
     {

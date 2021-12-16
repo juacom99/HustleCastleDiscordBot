@@ -43,8 +43,6 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.restaction.ChannelAction;
 import okhttp3.Authenticator;
 import okhttp3.OkHttpClient;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 import org.joda.time.LocalTime;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.CronTrigger;
@@ -57,6 +55,8 @@ import org.quartz.SchedulerException;
 import org.quartz.SchedulerFactory;
 import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -175,18 +175,18 @@ public class HustleCastleBot extends ListenerAdapter {
         perms.add(Permission.VOICE_USE_VAD);
 
         //Create Roles with basic permissions
-        if (guild.getRolesByName("Solder", true).isEmpty()) {
+        if (guild.getRolesByName("Soldiers", true).isEmpty()) {
             guild.createRole()
-                    .setName("Solder")
+                    .setName("Soldiers")
                     .setPermissions(perms)
                     .setColor(new Color(52, 152, 219))
                     .setHoisted(true)
                     .complete();
         }
 
-        if (guild.getRolesByName("Advisor", true).isEmpty()) {
+        if (guild.getRolesByName("Advisors", true).isEmpty()) {
             guild.createRole()
-                    .setName("Advisor")
+                    .setName("Advisors")
                     .setPermissions(perms)
                     .setColor(new Color(26, 188, 156))
                     .setHoisted(true)
@@ -197,9 +197,9 @@ public class HustleCastleBot extends ListenerAdapter {
         perms.add(Permission.CREATE_INSTANT_INVITE);
         perms.add(Permission.MESSAGE_MENTION_EVERYONE);
 
-        if (guild.getRolesByName("Officer", true).isEmpty()) {
+        if (guild.getRolesByName("Officers", true).isEmpty()) {
             guild.createRole()
-                    .setName("Officer")
+                    .setName("Officers")
                     .setPermissions(perms)
                     .setColor(new Color(32, 102, 148))
                     .setHoisted(true)
@@ -209,9 +209,9 @@ public class HustleCastleBot extends ListenerAdapter {
         perms.add(Permission.MANAGE_CHANNEL);
         perms.add(Permission.MESSAGE_MANAGE);
 
-        if (guild.getRolesByName("Warlord", true).isEmpty()) {
+        if (guild.getRolesByName("Warlords", true).isEmpty()) {
             guild.createRole()
-                    .setName("Warlord")
+                    .setName("Warlords")
                     .setPermissions(perms)
                     .setColor(new Color(230, 126, 34))
                     .setHoisted(true)
@@ -226,9 +226,9 @@ public class HustleCastleBot extends ListenerAdapter {
         perms.add(Permission.PRIORITY_SPEAKER);
         perms.add(Permission.VIEW_AUDIT_LOGS);
 
-        if (guild.getRolesByName("Deputy  Leader", true).isEmpty()) {
+        if (guild.getRolesByName("Deputy Leaders", true).isEmpty()) {
             guild.createRole()
-                    .setName("Deputy  Leader")
+                    .setName("Deputy Leaders")
                     .setPermissions(perms)
                     .setColor(new Color(168, 67, 0))
                     .setHoisted(true)
@@ -238,7 +238,7 @@ public class HustleCastleBot extends ListenerAdapter {
         perms.add(Permission.BAN_MEMBERS);
         perms.add(Permission.MANAGE_ROLES);
 
-        if (guild.getRolesByName("Leader", true).isEmpty()) {
+        if (guild.getRolesByName("Leaders", true).isEmpty()) {
             guild.createRole()
                     .setName("Leader")
                     .setPermissions(perms)

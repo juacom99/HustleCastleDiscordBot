@@ -6,19 +6,17 @@
 package com.improvisados.hustlecastlediscordbot;
 
 import com.improvisados.hustlecastlediscordbot.configuration.Configuration;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.EnumSet;
 import javax.security.auth.login.LoginException;
-import net.dv8tion.jda.api.Permission;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.log4j.LogManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -26,7 +24,7 @@ import org.apache.log4j.LogManager;
  */
 public class Main {
 
-    private static final org.apache.log4j.Logger logger = LogManager.getLogger(Main.class.getName());
+    private static final Logger logger = LogManager.getLogger(Main.class.getName());
 
     public static void main(String[] args) {
 
@@ -36,8 +34,7 @@ public class Main {
         opts.addOption(conf);
 
         CommandLineParser prs = new DefaultParser();
-
-        System.out.println("Present Project Directory : " + new File(".").getAbsolutePath());
+        
         try {
             CommandLine cmdln = prs.parse(opts, args);
             Configuration cfg;
