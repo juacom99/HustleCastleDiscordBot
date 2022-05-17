@@ -357,7 +357,7 @@ public class HustleCastleBot extends ListenerAdapter {
                 
                 setUpScheduleJob(new WarStartsRemainderJob(), war,"Clan War Starts","War-start-" + i);
                  war = war.plusMinutes(105);
-                 setUpScheduleJob(new WarAboutToBeginJob(), war,"Clan War About to Begin", "Clan-War-aboiut-to-begine-"+i);
+                 setUpScheduleJob(new WarAboutToBeginJob(), war,"Clan War About to Begin", "Clan-War-about-to-begine-"+i);
                 i++;
             }
             
